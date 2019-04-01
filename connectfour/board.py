@@ -10,12 +10,12 @@ class Board(object):
     DEFAULT_HEIGHT = 6
 
     def __init__(
-        self,
-        board=None,
-        height=None,
-        width=None,
-        last_move=[None, None],
-        num_to_connect=4
+            self,
+            board=None,
+            height=None,
+            width=None,
+            last_move=[None, None],
+            num_to_connect=4
     ):
         if board is not None and (height is not None or width is not None):
             raise RuntimeError('Cannot specify both a board and a board size value')
@@ -190,15 +190,15 @@ class Board(object):
                     curr = b[j][i]
                     k, m = j + 1, i + 1
                     while k < self.height and m < self.width:
-                            if b[k][m] == curr:
-                                same_count += 1
-                                if same_count is self.num_to_connect and curr != 0:
-                                    return curr
-                            else:
-                                same_count = 1
-                                curr = b[k][m]
-                            k += 1
-                            m += 1
+                        if b[k][m] == curr:
+                            same_count += 1
+                            if same_count is self.num_to_connect and curr != 0:
+                                return curr
+                        else:
+                            same_count = 1
+                            curr = b[k][m]
+                        k += 1
+                        m += 1
         return 0
 
     def update_scores(self, x, y, current_player, is_player_one):
@@ -246,25 +246,25 @@ class Board(object):
 
         # Fill in the horizontal win positions
         for i in range(size_y):
-            for j in range(size_x-num_to_connect+1):
+            for j in range(size_x - num_to_connect + 1):
                 for k in range(num_to_connect):
-                    win_indices = map_[j+k][i]
+                    win_indices = map_[j + k][i]
                     win_indices.append(win_index)
                 win_index += 1
 
         # Fill in the vertical win positions
         for i in range(size_x):
-            for j in range(size_y-num_to_connect+1):
+            for j in range(size_y - num_to_connect + 1):
                 for k in range(num_to_connect):
-                    win_indices = map_[i][j+k]
+                    win_indices = map_[i][j + k]
                     win_indices.append(win_index)
                 win_index += 1
 
         # Fill in the forward diagonal win positions
         for i in range(size_y - num_to_connect + 1):
-            for j in range(size_x-num_to_connect+1):
+            for j in range(size_x - num_to_connect + 1):
                 for k in range(num_to_connect):
-                    win_indices = map_[j+k][i+k]
+                    win_indices = map_[j + k][i + k]
                     win_indices.append(win_index)
                 win_index += 1
 
@@ -272,7 +272,7 @@ class Board(object):
         for i in range(size_y - num_to_connect + 1):
             for j in range(size_x - 1, num_to_connect - 1 - 1, -1):
                 for k in range(num_to_connect):
-                    win_indices = map_[j-k][i+k]
+                    win_indices = map_[j - k][i + k]
                     win_indices.append(win_index)
                 win_index += 1
 
@@ -287,10 +287,10 @@ class Board(object):
             return self.height * ((self.width - num_to_connect) + 1)
         else:
             return (
-                4 * self.width * self.height -
-                3 * self.width * num_to_connect -
-                3 * self.height * num_to_connect +
-                3 * self.width + 3 * self.height -
-                4 * num_to_connect +
-                2 * num_to_connect * num_to_connect + 2
+                    4 * self.width * self.height -
+                    3 * self.width * num_to_connect -
+                    3 * self.height * num_to_connect +
+                    3 * self.width + 3 * self.height -
+                    4 * num_to_connect +
+                    2 * num_to_connect * num_to_connect + 2
             )
