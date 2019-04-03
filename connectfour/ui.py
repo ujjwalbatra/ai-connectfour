@@ -126,6 +126,7 @@ class Terrain(Canvas):
         row, col = self.game.current_player.get_move(self.b)
         assert self.b.valid_move(row, col)
         self.b.last_move = [row, col]
+        self.game.metrics['all_moves'].append( [row, col, self.game.current_player.id] )
         self.reload_board(row, col, self.game.current_player.id)
 
     def action(self, event):
@@ -142,6 +143,7 @@ class Terrain(Canvas):
                 self.reload_board(row, col, self.game.current_player.id)
 
             self.b.last_move = [row, col]
+            self.game.metrics['all_moves'].append( [row, col, self.game.current_player.id] )
             self.game.change_turn()
             self.set_post_move_state()
             self.update()
@@ -193,6 +195,7 @@ def run_exit(game, result):
         output["winner_id"] = result
 
     output["num_moves"] = game.metrics["num_moves"]
+    output["all_moves"] = game.metrics["all_moves"]
     print(json.dumps(output))
     exit(0)
 
@@ -200,6 +203,9 @@ def run_exit(game, result):
 def run_headless_game(game):
     while True:
         row, col = game.current_player.get_move(game.board)
+
+        game.metrics['all_moves'].append( [row, col, game.current_player.id] )
+
         game.board.board[row][col] = game.current_player.id
         game.change_turn()
 

@@ -1,10 +1,10 @@
 from connectfour.agents.computer_player import RandomAgent
-
+import random
 
 class StudentAgent(RandomAgent):
     def __init__(self, name):
         super().__init__(name)
-        self.MaxDepth = 2
+        self.MaxDepth = 1
 
 
     def get_move(self, board):
@@ -15,13 +15,13 @@ class StudentAgent(RandomAgent):
         Returns:
             A tuple of two integers, (row, col)
         """
-        valid_moves = board.valid_moves()
 
+        valid_moves = board.valid_moves()
         vals = []
         moves = []
 
         for move in valid_moves:
-            next_state = board.next_state(move)
+            next_state = board.next_state(self.id, move[1])
             moves.append( move )
             vals.append( self.dfMiniMax(next_state, 1) )
 
@@ -31,19 +31,15 @@ class StudentAgent(RandomAgent):
     def dfMiniMax(self, board, depth):
         # Goal return column with maximized scores of all possible next states
         
-        # loop through next states (cols 1..w)
-        # 	call dfMinimax of each resultant state 
-        
         if depth == self.MaxDepth:
             return self.evaluateBoardState(board)
 
         valid_moves = board.valid_moves()
-
         vals = []
         moves = []
 
         for move in valid_moves:
-            next_state = board.next_state(move)
+            next_state = board.next_state(self.id, move[1])
             moves.append( move )
             vals.append( self.dfMiniMax(next_state, depth + 1) )
 
@@ -88,5 +84,5 @@ class StudentAgent(RandomAgent):
             winner()
         """
 				
-        return 0
+        return random.uniform(0, 1)
 

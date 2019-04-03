@@ -45,7 +45,8 @@ class Game:
         self.fast_play = fast_play
         self.exit_on_game_end = auto_close
         self.metrics = {
-            'num_moves': 0
+            'num_moves': 0,
+            'all_moves': []
         }
 
     def change_turn(self):
