@@ -40,7 +40,7 @@ Run `black` with: `pipenv run black connectfour tests` (You can omit `pipenv run
 
 ### Run
 
-1. `git clone https://github.com/thundergolfer/rmit-connectfour.git`
+1. `git clone https://github.com/stevenkorevaar/ai1901-connectfour.git`
 2. `cd rmit-connectfour`
 3. `pipenv install` (this will install all dependencies needed) 
 4. `pipenv shell` (activate the virtual environment for the project/directory)
@@ -68,6 +68,10 @@ As an example, we can run:
 `python -m connectfour.game --player-one RandomAgent --player-two HumanPlayer`
 
 To have a `RandomAgent` play against yourself.
+
+`python -m connectfour.game --player-one RandomAgent --player-two StudentAgent --no-graphics --fast --auto-close`
+
+This may be useful for you to run games in quick succession to see how your agent performs against the random agent.
 
 ### Options
 
@@ -129,3 +133,7 @@ The code was refactored and functionality was extended by [Jonathon Belotti](htt
 The code was refactored and functionality was extended by [Steven Korevaar](https://github.com/StevenKorevaar) under the guidance of A/Prof. Xiaodong Li in charge of the RMIT AI course. The improvements & functionalities added are:
 
 * Dynamic loading of agents to allow for automated testing 
+* Tracking and outputing moves made throughout a game
+* Added standard minimax agent (without evaluation function for students to start with)
+* Fixed board.next_state(), winner(), and terminal() functions
+

@@ -8,14 +8,16 @@ dy = [1, 0, -1, 1]
 class Board(object):
     DEFAULT_WIDTH = 7
     DEFAULT_HEIGHT = 6
+    all_moves = []
 
     def __init__(
-            self,
-            board=None,
-            height=None,
-            width=None,
-            last_move=[None, None],
-            num_to_connect=4
+        self,
+        board=None,
+        height=None,
+        width=None,
+        last_move=[None, None],
+        #all_moves=None,
+        num_to_connect=4
     ):
         if board is not None and (height is not None or width is not None):
             raise RuntimeError('Cannot specify both a board and a board size value')
@@ -24,6 +26,8 @@ class Board(object):
         self.width = len(self.board[0])
         self.height = len(self.board)
         self.last_move = last_move
+        #self.all_moves = all_moves
+        #self.all_moves.append(last_move)
         self.num_to_connect = num_to_connect
         self.winning_zones = self._build_winning_zones_map()
         self.score_array = [
@@ -85,6 +89,10 @@ class Board(object):
         """
         Returns true when the game is finished, otherwise false.
         """
+        # check for a winner:
+        if (self.winner() != 0):
+            return False
+
         for i in range(len(self.board[0])):
             if self.board[0][i] == 0:
                 return False
@@ -101,7 +109,7 @@ class Board(object):
 
         return legal
 
-    def next_state(self, turn):
+    def next_state_rand(self, turn):
         aux = copy.deepcopy(self)
         moves = aux.legal_moves()
         if len(moves) > 0:
@@ -110,6 +118,18 @@ class Board(object):
             aux.board[row][moves[ind]] = turn
             aux.last_move = [row, moves[ind]]
         return aux
+
+    def next_state(self, turn, col):
+        next_board = copy.deepcopy(self)
+        moves = next_board.legal_moves()
+
+        if(col not in moves):
+            return 0
+
+        row = next_board.try_move(col)
+        next_board.board[row][col] = turn
+        next_board.last_move = [row, col]
+        return next_board
 
     def _empty_board(self, height, width):
         if height is None:
@@ -131,7 +151,7 @@ class Board(object):
     def winner(self):
         """
         Takes the board as input and determines if there is a winner.
-        If the game has a winner, it returns the player number (Player One = 1, Player Two = -1).
+        If the game has a winner, it returns the player number (Player One = 1, Player Two = 2).
         If the game is still ongoing, it returns zero.
         """
         row_winner = self._check_rows()
@@ -190,15 +210,15 @@ class Board(object):
                     curr = b[j][i]
                     k, m = j + 1, i + 1
                     while k < self.height and m < self.width:
-                        if b[k][m] == curr:
-                            same_count += 1
-                            if same_count is self.num_to_connect and curr != 0:
-                                return curr
-                        else:
-                            same_count = 1
-                            curr = b[k][m]
-                        k += 1
-                        m += 1
+                            if b[k][m] == curr:
+                                same_count += 1
+                                if same_count is self.num_to_connect and curr != 0:
+                                    return curr
+                            else:
+                                same_count = 1
+                                curr = b[k][m]
+                            k += 1
+                            m += 1
         return 0
 
     def update_scores(self, x, y, current_player, is_player_one):
@@ -246,25 +266,25 @@ class Board(object):
 
         # Fill in the horizontal win positions
         for i in range(size_y):
-            for j in range(size_x - num_to_connect + 1):
+            for j in range(size_x-num_to_connect+1):
                 for k in range(num_to_connect):
-                    win_indices = map_[j + k][i]
+                    win_indices = map_[j+k][i]
                     win_indices.append(win_index)
                 win_index += 1
 
         # Fill in the vertical win positions
         for i in range(size_x):
-            for j in range(size_y - num_to_connect + 1):
+            for j in range(size_y-num_to_connect+1):
                 for k in range(num_to_connect):
-                    win_indices = map_[i][j + k]
+                    win_indices = map_[i][j+k]
                     win_indices.append(win_index)
                 win_index += 1
 
         # Fill in the forward diagonal win positions
         for i in range(size_y - num_to_connect + 1):
-            for j in range(size_x - num_to_connect + 1):
+            for j in range(size_x-num_to_connect+1):
                 for k in range(num_to_connect):
-                    win_indices = map_[j + k][i + k]
+                    win_indices = map_[j+k][i+k]
                     win_indices.append(win_index)
                 win_index += 1
 
@@ -272,7 +292,7 @@ class Board(object):
         for i in range(size_y - num_to_connect + 1):
             for j in range(size_x - 1, num_to_connect - 1 - 1, -1):
                 for k in range(num_to_connect):
-                    win_indices = map_[j - k][i + k]
+                    win_indices = map_[j-k][i+k]
                     win_indices.append(win_index)
                 win_index += 1
 
@@ -287,10 +307,10 @@ class Board(object):
             return self.height * ((self.width - num_to_connect) + 1)
         else:
             return (
-                    4 * self.width * self.height -
-                    3 * self.width * num_to_connect -
-                    3 * self.height * num_to_connect +
-                    3 * self.width + 3 * self.height -
-                    4 * num_to_connect +
-                    2 * num_to_connect * num_to_connect + 2
+                4 * self.width * self.height -
+                3 * self.width * num_to_connect -
+                3 * self.height * num_to_connect +
+                3 * self.width + 3 * self.height -
+                4 * num_to_connect +
+                2 * num_to_connect * num_to_connect + 2
             )
