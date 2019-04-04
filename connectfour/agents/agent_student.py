@@ -1,11 +1,11 @@
 from connectfour.agents.computer_player import RandomAgent
 import random
 
+
 class StudentAgent(RandomAgent):
     def __init__(self, name):
         super().__init__(name)
         self.MaxDepth = 1
-
 
     def get_move(self, board):
         """
@@ -22,15 +22,15 @@ class StudentAgent(RandomAgent):
 
         for move in valid_moves:
             next_state = board.next_state(self.id, move[1])
-            moves.append( move )
-            vals.append( self.dfMiniMax(next_state, 1) )
+            moves.append(move)
+            vals.append(self.dfMiniMax(next_state, 1))
 
-        bestMove = moves[vals.index( max(vals) )]
+        bestMove = moves[vals.index(max(vals))]
         return bestMove
 
     def dfMiniMax(self, board, depth):
         # Goal return column with maximized scores of all possible next states
-        
+
         if depth == self.MaxDepth:
             return self.evaluateBoardState(board)
 
@@ -40,10 +40,9 @@ class StudentAgent(RandomAgent):
 
         for move in valid_moves:
             next_state = board.next_state(self.id, move[1])
-            moves.append( move )
-            vals.append( self.dfMiniMax(next_state, depth + 1) )
+            moves.append(move)
+            vals.append(self.dfMiniMax(next_state, depth + 1))
 
-        
         if depth % 2 == 1:
             bestVal = min(vals)
         else:
@@ -59,7 +58,7 @@ class StudentAgent(RandomAgent):
             If we have won the game, return 1.
             If neither of the players has won, return a random number.
         """
-        
+
         """
         These are the variables and functions for board objects which may be helpful when creating your Agent.
         Look into board.py for more information/descriptions of each, or to look for any other definitions which may help you.
@@ -83,6 +82,25 @@ class StudentAgent(RandomAgent):
             next_state(turn)
             winner()
         """
-				
-        return random.uniform(0, 1)
+
+        if board.winner() == 1:
+            return -1
+        elif board.winner() == 2:
+            return 1
+
+        row23 = [5, 8, 11, 13, 11, 8, 5]
+        row14 = [4, 6, 8, 10, 8, 6, 4]
+        row05 = [.3, .4, .5, .7, .5, .4, .3]
+
+        print("state -  ")
+        for i in range(6):
+            print(board.get_cell_value(5, i))
+        print("", end="\n\n")
+
+        for i in range(6):
+            for j in range(7):
+                k = 5 - i
+                if board.get_cell_value(k, j) == 2:
+                    return row05[j]
+
 
