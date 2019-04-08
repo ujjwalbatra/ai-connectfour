@@ -5,7 +5,7 @@ import random
 class StudentAgent(RandomAgent):
     def __init__(self, name):
         super().__init__(name)
-        self.MaxDepth = 1
+        self.MaxDepth = 6
 
     def get_move(self, board):
         """
@@ -39,7 +39,11 @@ class StudentAgent(RandomAgent):
         moves = []
 
         for move in valid_moves:
-            next_state = board.next_state(self.id, move[1])
+            if depth % 2 == 1:
+                next_state = board.next_state(self.id % 2 + 1, move[1])
+            else:
+                next_state = board.next_state(self.id, move[1])
+
             moves.append(move)
             vals.append(self.dfMiniMax(next_state, depth + 1))
 
@@ -52,7 +56,7 @@ class StudentAgent(RandomAgent):
 
     def evaluateBoardState(self, board):
         """
-        Your evaluation function should look at the current state and return a score for it. 
+        Your evaluation function should look at the current state and return a score for it.
         As an example, the random agent provided works as follows:
             If the opponent has won this game, return -1.
             If we have won the game, return 1.
@@ -84,23 +88,27 @@ class StudentAgent(RandomAgent):
         """
 
         if board.winner() == 1:
-            return -1
+            return -1000
         elif board.winner() == 2:
-            return 1
+            return 1000
 
-        row23 = [5, 8, 11, 13, 11, 8, 5]
-        row14 = [4, 6, 8, 10, 8, 6, 4]
-        row05 = [.3, .4, .5, .7, .5, .4, .3]
+        map_ = [[3, 4, 5, 7, 5, 4, 3],
+                [4, 6, 8, 10, 8, 6, 4],
+                [5, 8, 11, 13, 11, 8, 5],
+                [5, 8, 11, 13, 11, 8, 5],
+                [4, 6, 8, 10, 8, 6, 4],
+                [3, 4, 5, 7, 5, 4, 3]
+                ]
 
-        print("state -  ")
+        student_agent_utility = 0
+        nemesis_utility = 0
+
         for i in range(6):
-            print(board.get_cell_value(5, i))
-        print("", end="\n\n")
+            for col in range(7):
+                row = 5 - i
+                if board.get_cell_value(row, col) == 2:
+                    student_agent_utility += map_[row][col]
+                elif board.get_cell_value(row, col) == 1:
+                    nemesis_utility -= map_[row][col]
 
-        for i in range(6):
-            for j in range(7):
-                k = 5 - i
-                if board.get_cell_value(k, j) == 2:
-                    return row05[j]
-
-
+        return student_agent_utility - nemesis_utility
