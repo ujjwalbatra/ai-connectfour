@@ -23,36 +23,44 @@ class StudentAgent(RandomAgent):
         for move in valid_moves:
             next_state = board.next_state(self.id, move[1])
             moves.append(move)
-            vals.append(self.dfMiniMax(next_state, 1))
+            vals.append(self.dfMiniMax(next_state, float("-inf"), float("+inf"), 1))
 
         bestMove = moves[vals.index(max(vals))]
+
         return bestMove
 
-    def dfMiniMax(self, board, depth):
+    def dfMiniMax(self, board, alpha, beta, depth):
         # Goal return column with maximized scores of all possible next states
 
         if depth == self.MaxDepth:
             return self.evaluateBoardState(board)
 
-        valid_moves = board.valid_moves()
-        vals = []
         moves = []
 
-        for move in valid_moves:
-            if depth % 2 == 1:
-                next_state = board.next_state(self.id % 2 + 1, move[1])
-            else:
-                next_state = board.next_state(self.id, move[1])
-
-            moves.append(move)
-            vals.append(self.dfMiniMax(next_state, depth + 1))
-
         if depth % 2 == 1:
-            bestVal = min(vals)
-        else:
-            bestVal = max(vals)
+            bestVal = float("inf")
+            valid_moves = board.valid_moves()
+            for move in valid_moves:
+                next_state = board.next_state(self.id % 2 + 1, move[1])
+                moves.append(move)
+                bestVal = min(bestVal, self.dfMiniMax(next_state, alpha, beta, depth + 1))
+                beta = min(beta, bestVal)
+                if beta <= alpha:
+                    break
+            return bestVal
 
-        return bestVal
+        else:
+            bestVal = float("-inf")
+            valid_moves = board.valid_moves()
+            for move in valid_moves:
+                next_state = board.next_state(self.id, move[1])
+                moves.append(move)
+                bestVal = max(bestVal, self.dfMiniMax(next_state, alpha, beta, depth + 1))
+                alpha = max(alpha, bestVal)
+                if beta <= alpha:
+                    break
+
+            return bestVal
 
     def evaluateBoardState(self, board):
         """
