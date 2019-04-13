@@ -32,12 +32,7 @@ class StudentAgent(RandomAgent):
     def dfMiniMax(self, board, alpha, beta, depth):
         # Goal return column with maximized scores of all possible next states
 
-        if depth < 8:
-            self.MaxDepth = 6
-        else:
-            self.MaxDepth = 7
-
-        if depth == self.MaxDepth:
+        if depth == self.MaxDepth or board.terminal():
             return self.evaluateBoardState(board)
 
         moves = []
@@ -100,10 +95,13 @@ class StudentAgent(RandomAgent):
             winner()
         """
 
-        if board.winner() == 1:
-            return -200
-        elif board.winner() == 2:
-            return 200
+        winner = board.winner()
+
+        if winner != 0:
+            if winner != self.id:
+                return -500
+            elif winner == self.id:
+                return 500
 
         map_ = [[3, 4, 5, 7, 5, 4, 3],
                 [4, 6, 8, 10, 8, 6, 4],
