@@ -91,7 +91,7 @@ class Board(object):
         """
         # check for a winner:
         if (self.winner() != 0):
-            return False
+            return True
 
         for i in range(len(self.board[0])):
             if self.board[0][i] == 0:
