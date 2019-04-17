@@ -6,6 +6,8 @@ from connectfour.board import Board
 from connectfour.agents.computer_player import MonteCarloAgent, RandomAgent
 from connectfour.agents.agent_student import StudentAgent
 from connectfour.agents.agent import HumanPlayer
+#from connectfour.agents.agent_hard import HardAgent
+
 
 MAX_GAME_WIDTH = MAX_GAME_HEIGHT = 100
 MIN_GAME_WIDTH = MIN_GAME_HEIGHT = 4
@@ -14,7 +16,8 @@ PLAYER_TYPE_MAP = {
     'HumanPlayer': HumanPlayer,
     'RandomAgent': RandomAgent,
     'MonteCarloAgent': MonteCarloAgent,
-    'StudentAgent': StudentAgent
+    'StudentAgent' : StudentAgent,
+    #'HardAgent' : HardAgent,
 }
 
 
@@ -27,13 +30,13 @@ class Game:
     PLAYER_TWO_ID = 2
 
     def __init__(
-            self,
-            player_one,
-            player_two,
-            board_height,
-            board_width,
-            fast_play=False,
-            auto_close=False
+        self,
+        player_one,
+        player_two,
+        board_height,
+        board_width,
+        fast_play=False,
+        auto_close=False
     ):
         self.player_one = player_one
         self.player_two = player_two
@@ -63,26 +66,29 @@ class Game:
 def validate_args(args):
     p1 = 0
     p2 = 0
+
+    print("player one = ", args.player_one)
+
     if args.player_one not in PLAYER_TYPE_MAP:
-        # print('connectfour.agents.'+args.player_one+'.'+args.player_one)
-        # playerTest = my_import('connectfour.agents.'+args.player_one+'.'+args.player_one)
+        #print("here")
+        #print('connectfour.agents.'+args.player_one+'.'+args.player_one)
+        #playerTest = my_import('connectfour.agents.'+args.player_one+'.'+args.player_one)
+         
+        p1 = locate('connectfour.agents.'+args.player_one)
 
-        p1 = locate('connectfour.agents.' + args.player_one)
-
-        # RuntimeError("'{}' is not a valid player type".format(args.player_one))
+        #RuntimeError("'{}' is not a valid player type".format(args.player_one))
 
     if args.player_two not in PLAYER_TYPE_MAP:
-        p2 = locate('connectfour.agents.' + args.player_two)
-        # raise RuntimeError("'{}' is not a valid player type".format(args.player_two))
+        p2 = locate('connectfour.agents.'+args.player_two)
+        #raise RuntimeError("'{}' is not a valid player type".format(args.player_two))
 
     if (
-            args.no_graphics and
-            (args.player_one == 'HumanPlayer' or args.player_two == 'HumanPlayer')
+        args.no_graphics and
+        (args.player_one == 'HumanPlayer' or args.player_two == 'HumanPlayer')
     ):
         raise RuntimeError("Cannot have human player when running with no graphics")
-
+    
     return p1, p2
-
 
 def my_import(name):
     components = name.split('.')
@@ -90,7 +96,6 @@ def my_import(name):
     for comp in components[1:]:
         mod = getattr(mod, comp)
     return mod
-
 
 def main():
     parser = argparse.ArgumentParser(description="Set up the game.")
@@ -143,17 +148,17 @@ def main():
         action='store_true',
         help='Shutdown the program after then game ends in a win or draw.'
     )
-
+    #print("Before parse args")
     args = parser.parse_args()
-
+    #print("Before val args")
     p1, p2 = validate_args(args)
 
-    if (p1 != 0):
+    if(p1 != 0):
         player_one = p1
     else:
         player_one = PLAYER_TYPE_MAP[args.player_one]("Player 1")
 
-    if (p2 != 0):
+    if(p2 != 0):
         player_two = p2
     else:
         player_two = PLAYER_TYPE_MAP[args.player_two]("Player 2")
