@@ -103,6 +103,7 @@ class StudentAgent(RandomAgent):
             elif winner == self.id:
                 return 500
 
+        nothing = None
         student_agent_utility = 0
         nemesis_utility = 0
         nemesis_id = 1 if (self.id == 2) else 2
