@@ -5,7 +5,7 @@ import random
 class StudentAgent(RandomAgent):
     def __init__(self, name):
         super().__init__(name)
-        self.MaxDepth = 6
+        self.MaxDepth = 4
 
     def get_move(self, board):
         """
