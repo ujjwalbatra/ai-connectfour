@@ -122,6 +122,20 @@ class StudentAgent(RandomAgent):
         return student_agent_utility - nemesis_utility
 
     def __get_horizontal_utility(self, board, row, col, id):
+        """
+        Calculates horizontal utility(east and west both directions and all permutations) 
+        of a given coordinate on the board.
+              
+        Args:
+            board: An instance of `Board` that is the current state of the board.
+            row: row (y coordinate) of the point in board to check utility for
+            col: col (x coordinate) of the point in board to check utility for
+            id: id of the player to calculate utility for
+
+        Returns:
+            int: utility of the coordinate 
+
+        """
         start = col
         end = col
 
@@ -147,6 +161,20 @@ class StudentAgent(RandomAgent):
             return (end - start) - 2
 
     def __get_vertical_utility(self, board, row, col, id):
+        """
+        Calculates vertical utility(north and south both directions and all permutations) 
+        of a given coordinate on the board.
+        
+        Args:
+            board: An instance of `Board` that is the current state of the board.
+            row: row (y coordinate) of the point in board to check utility for
+            col: col (x coordinate) of the point in board to check utility for
+            id: id of the player to calculate utility for
+
+        Returns:
+            int: utility of the coordinate
+
+        """
         start = row
         end = row
 
@@ -172,10 +200,36 @@ class StudentAgent(RandomAgent):
             return (start - end) - 2
 
     def __get_diagonal_utility(self, board, row, col, id):
-        return self.__get_primary_diagonal_utility(board, row, col, id) \
-               + self.__get_non_primary_diagonal_utility(board, row, col, id)
+        """
+        Gets utility of each diagonal and returns returns the sum of utilities.
+
+        Args:
+            board: An instance of `Board` that is the current state of the board.
+            row: row (y coordinate) of the point in board to check utility for
+            col: col (x coordinate) of the point in board to check utility for
+            id: id of the player to calculate utility for
+
+        Returns:
+            int: utility of the coordinate for both diagonals
+        """
+        return self.__get_primary_diagonal_utility(board, row, col, id) + \
+            self.__get_non_primary_diagonal_utility(board, row, col, id)
 
     def __get_primary_diagonal_utility(self, board, row, col, id):
+        """
+        Calculates primary diagonal(top left to bottom right on board)
+        utility(north-west and south-east both directions and all permutations)
+        of a given coordinate on the board.
+
+        Args:
+            board: An instance of `Board` that is the current state of the board.
+            row: row (y coordinate) of the point in board to check utility for
+            col: col (x coordinate) of the point in board to check utility for
+            id: id of the player to calculate utility for
+
+        Returns:
+            int: utility of the coordinate
+        """
         start = [row, col]
         end = [row, col]
 
@@ -205,6 +259,20 @@ class StudentAgent(RandomAgent):
             return (end[0] - start[0]) - 2
 
     def __get_non_primary_diagonal_utility(self, board, row, col, id):
+        """
+        Calculates non primary diagonal(bottom left to top right on board)
+        utility(south-west and north-east directions and all permutations)
+        of a given coordinate on the board.
+
+        Args:
+            board: An instance of `Board` that is the current state of the board.
+            row: row (y coordinate) of the point in board to check utility for
+            col: col (x coordinate) of the point in board to check utility for
+            id: id of the player to calculate utility for
+
+        Returns:
+            int: utility of the coordinate
+        """
         start = [row, col]
         end = [row, col]
 
