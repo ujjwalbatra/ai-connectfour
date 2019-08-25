@@ -1,6 +1,6 @@
 # RMIT AI - Connect4
 
-![screenshot](https://github.com/StevenKorevaar/ai1901-connectfour/blob/master/img/game_example-small.gif)
+![screenshot](https://www.thetoyshop.com/medias/517180-Primary-515Wx515H?context=bWFzdGVyfGltYWdlc3w4NjAyM3xpbWFnZS9qcGVnfGltYWdlcy9oZDAvaDU1LzkxNDIwNTAzOTAwNDYuanBnfDQzNDhkMGQyNzVkMTRmZGY4MmFlNzE5YzFhZDBiMjkzYWZmNzgzNTI3YTFjMzU4OGE1MjUyZGVlMjllNTM1MzE)
 
 ## About The Game
 
